@@ -17,7 +17,7 @@ class CompanyController extends Controller
      */
     public function index()
     {
-        return view('company.index', [
+        return view('companies.index', [
             'companies' => $this->companyService->getCompanies(),
         ]);
     }
@@ -27,7 +27,7 @@ class CompanyController extends Controller
      */
     public function create()
     {
-        return view('company.upsert');
+        return view('companies.upsert');
     }
 
     /**
@@ -49,7 +49,7 @@ class CompanyController extends Controller
      */
     public function edit(Company $company)
     {
-        return view('company.upsert', [
+        return view('companies.upsert', [
             'company' => $company,
         ]);
     }

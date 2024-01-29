@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Models\Company;
 use Exception;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 
@@ -12,9 +13,9 @@ class CompanyService
     /**
      * Retrieve all companies.
      *
-     * @return array
+     * @return Collection
      */
-    public function getCompanies(): array
+    public function getCompanies(): Collection
     {
         return Company::get();
     }
@@ -28,10 +29,12 @@ class CompanyService
     public function storeCompany(array $request): ?Company
     {
         try{
-            $logoPathName = uniqid() . '.' . $request['logo']->extension();
-            Storage::disk('public')->put($logoPathName, $request['logo']);
+            if(isset($request['logo'])){
+                $logoName = uniqid() . '.' . $request['logo']->extension();
+                Storage::disk('public')->putFileAs('', $request['logo'], $logoName);
 
-            $request = array_merge($request, ['logo' => $logoPathName]);
+                $request = array_merge($request, ['logo' => $logoName]);
+            }
 
             return Company::create($request);
         } catch (Exception $e) {
@@ -51,7 +54,16 @@ class CompanyService
     public function updateCompany(Company $company, array $request): Company|false
     {
         try{
+
+            if(isset($request['logo'])){
+                $logoName = uniqid() . '.' . $request['logo']->extension();
+                Storage::disk('public')->putFileAs('', $request['logo'], $logoName);
+
+                $request = array_merge($request, ['logo' => $logoName]);
+            }
+
             $company->update($request);
+
             return $company->refresh();
         } catch (Exception $e) {
             Log::error($e);
@@ -66,7 +78,12 @@ class CompanyService
      * @param Company $company
      * @return bool
      */
-    public function deleteCompany(Company $company){
+    public function deleteCompany(Company $company): bool
+    {
+        if($company->logo){
+            Storage::disk('public')->delete($company->logo);
+        }
+
         return $company->delete() ?? false;
     }
 }

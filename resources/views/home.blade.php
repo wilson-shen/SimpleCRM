@@ -14,7 +14,14 @@
                         </div>
                     @endif
 
-                    {{ __('You are logged in!') }}
+                        <ul>
+                            <li>
+                                <a href="{{ route('companies.index') }}">Company</a>
+                            </li>
+                            <li>
+                                <a href="{{ route('employees.index') }}">Employee</a>
+                            </li>
+                        </ul>
                 </div>
             </div>
         </div>

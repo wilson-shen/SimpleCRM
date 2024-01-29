@@ -19,7 +19,7 @@ class EmployeeController extends Controller
      */
     public function index()
     {
-        return view('employee.index', [
+        return view('employees.index', [
             'employees' => $this->employeeService->getEmployees()
         ]);
     }
@@ -29,7 +29,7 @@ class EmployeeController extends Controller
      */
     public function create()
     {
-        return view('employee.upsert', [
+        return view('employees.upsert', [
             'companies' => $this->companyService->getCompanies(),
         ]);
     }
@@ -53,7 +53,7 @@ class EmployeeController extends Controller
      */
     public function edit(Employee $employee)
     {
-        return view('employee.upsert', [
+        return view('employees.upsert', [
             'employee' => $employee,
             'companies' => $this->companyService->getCompanies(),
         ]);

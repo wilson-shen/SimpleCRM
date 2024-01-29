@@ -4,11 +4,12 @@ namespace App\Services;
 
 use App\Models\Employee;
 use Exception;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\Log;
 
 class EmployeeService
 {
-    public function getEmployees(): array
+    public function getEmployees(): Collection
     {
         return Employee::get();
     }
