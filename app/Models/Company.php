@@ -10,7 +10,7 @@ class Company extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['name', 'email', 'logo'];
+    protected $fillable = ['name', 'email', 'logo', 'website'];
 
     /**
      * Retrieve the employees associated with the PHP function.
