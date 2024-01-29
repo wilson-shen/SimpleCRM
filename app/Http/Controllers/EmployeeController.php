@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\EmployeeIndexRequest;
+use App\Http\Requests\EmployeeStoreRequest;
+use App\Http\Requests\EmployeeUpdateRequest;
 use App\Models\Employee;
 use App\Services\CompanyService;
 use App\Services\EmployeeService;
@@ -17,10 +20,10 @@ class EmployeeController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(EmployeeIndexRequest $request)
     {
         return view('employees.index', [
-            'employees' => $this->employeeService->getEmployees()
+            'employees' => $this->employeeService->getEmployees($request->validated()),
         ]);
     }
 
@@ -37,9 +40,9 @@ class EmployeeController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(EmployeeStoreRequest $request)
     {
-        $employee = $this->employeeService->storeEmployee($request->all());
+        $employee = $this->employeeService->storeEmployee($request->validated());
 
         if($employee) {
             return redirect()->route('employees.index')->with(['success' => 'Employee created successfully.']);
@@ -62,9 +65,9 @@ class EmployeeController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Employee $employee)
+    public function update(EmployeeUpdateRequest $request, Employee $employee)
     {
-        $employee = $this->employeeService->updateEmployee($employee, $request->all());
+        $employee = $this->employeeService->updateEmployee($employee, $request->validated());
 
         if($employee) {
             return redirect()->route('employees.index')->with(['success' => 'Employee updated successfully.']);
@@ -76,9 +79,9 @@ class EmployeeController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(Employee $employee)
     {
-        if($this->employeeService->deleteEmployee(Employee::find($id))) {
+        if($this->employeeService->deleteEmployee($employee)) {
             return redirect()->route('employees.index')->with(['success' => 'Employee deleted successfully.']);
         }
 

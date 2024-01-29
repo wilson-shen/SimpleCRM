@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\CompanyIndexRequest;
+use App\Http\Requests\CompanyStoreRequest;
+use App\Http\Requests\CompanyUpdateRequest;
 use App\Models\Company;
 use App\Services\CompanyService;
 use Illuminate\Http\Request;
@@ -15,10 +18,10 @@ class CompanyController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(CompanyIndexRequest $request)
     {
         return view('companies.index', [
-            'companies' => $this->companyService->getCompanies(),
+            'companies' => $this->companyService->getCompanies($request->validated()),
         ]);
     }
 
@@ -33,9 +36,9 @@ class CompanyController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(CompanyStoreRequest $request)
     {
-        $company = $this->companyService->storeCompany($request->all());
+        $company = $this->companyService->storeCompany($request->validated());
 
         if($company) {
             return redirect()->route('companies.index')->with(['success' => 'Company created successfully.']);
@@ -57,9 +60,9 @@ class CompanyController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Company $company)
+    public function update(CompanyUpdateRequest $request, Company $company)
     {
-        $company = $this->companyService->updateCompany($company, $request->all());
+        $company = $this->companyService->updateCompany($company, $request->validated());
 
         if($company) {
             return redirect()->route('companies.index')->with(['success' => 'Company updated successfully.']);
@@ -75,6 +78,10 @@ class CompanyController extends Controller
     {
         if($this->companyService->deleteCompany($company)) {
             return redirect()->route('companies.index')->with(['success' => 'Company deleted successfully.']);
+        }
+
+        foreach ($company->employees as $employee) {
+            $employee->delete();
         }
 
         return redirect()->back()->withErrors(['error' => 'Failed to delete company.']);

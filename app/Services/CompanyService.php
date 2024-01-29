@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Models\Company;
 use Exception;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 
@@ -13,11 +14,15 @@ class CompanyService
     /**
      * Retrieve all companies.
      *
-     * @return Collection
+     * @param array $request
+     * @return LengthAwarePaginator
      */
-    public function getCompanies(): Collection
+    public function getCompanies(array $request): LengthAwarePaginator
     {
-        return Company::get();
+        return Company::paginate(
+            page: $request['page'] ?? 1,
+            perPage: $request['per_page'] ?? 10
+        );
     }
 
     /**
