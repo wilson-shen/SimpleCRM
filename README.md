@@ -16,6 +16,7 @@ $ git clone git@github.com:wilson-shen/SimpleCRM.git
 ```bash
 $ sudo mysql
 mysql> CREATE DATABASE `simplecrm` CHARACTER SET 'utf8mb4' COLLATE 'utf8mb4_unicode_ci';
+mysql> CREATE DATABASE `simplecrm_test` CHARACTER SET 'utf8mb4' COLLATE 'utf8mb4_unicode_ci';
 mysql> exit;
 ```
 
@@ -23,7 +24,9 @@ mysql> exit;
 ```bash
 $ cd SimpleCRM
 $ cp .env.example .env
+$ cp .env.test.example .env.test
 $ php artisan key:generate
+# remember to copy the APP_KEY in .env to .env.test
 ```
 
 ### 4. Install dependencies
@@ -32,7 +35,19 @@ $ composer install
 $ npm install
 ```
 
-### 5. Run the project
+### 5. Seed the database
+```bash
+# Admin seeder (required in order to login)
+$ php artisan db:seed AdminUserSeeder
+
+# Company list seeder (optional)
+$ php artisan db:seed CompanySeeder
+
+# Employee list seeder (optional)
+$ php artisan db:seed EmployeeSeeder
+```
+
+### 6. Run the project
 ```bash
 # terminal 1 - node.js
 $ npm run dev
@@ -41,7 +56,7 @@ $ npm run dev
 $ php artisan serve
 ```
 
-### 6. Test the project
+### 7. Test the project
 ```bash
 $ vendor/bin/phpunit
 ```
