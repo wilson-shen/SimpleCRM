@@ -24,9 +24,9 @@ mysql> exit;
 ```bash
 $ cd SimpleCRM
 $ cp .env.example .env
-$ cp .env.test.example .env.test
+$ cp .env.testing.example .env.testing
 $ php artisan key:generate
-# remember to copy the APP_KEY in .env to .env.test
+# remember to copy the APP_KEY hash value from .env to .env.testing
 ```
 
 ### 4. Install dependencies
