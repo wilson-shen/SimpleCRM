@@ -35,8 +35,10 @@ $ composer install
 $ npm install
 ```
 
-### 5. Seed the database
+### 5. Setup the database
 ```bash
+$ php artisan migrate
+
 # Admin seeder (required in order to login)
 $ php artisan db:seed AdminUserSeeder
 

@@ -5,6 +5,7 @@ namespace Tests\Unit;
 use App\Models\Company;
 use App\Models\Employee;
 use App\Services\CompanyService;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Tests\TestCase;
@@ -13,12 +14,32 @@ class CompanyUnitTest extends TestCase
 {
     use RefreshDatabase;
 
+    public function setUp(): void
+    {
+        parent::setUp();
+
+        $this->artisan('migrate');
+    }
+
+    public function test_get_companies(){
+        Company::factory(20)->create();
+
+        $companyService = new CompanyService();
+
+        $companies = $companyService->getCompanies();
+
+        $this->assertInstanceOf(Collection::class, $companies);
+        $this->assertInstanceOf(Company::class, $companies->first());
+
+        $this->assertEquals(20, $companies->count());
+    }
+
    public function test_get_paginated_companies(){
        Company::factory(20)->create();
 
        $companyService = new CompanyService();
 
-       $companies = $companyService->getCompanies([
+       $companies = $companyService->getPaginatedCompanies([
            'page' => 1,
            'per_page' => 10
        ]);

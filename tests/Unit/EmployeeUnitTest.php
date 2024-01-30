@@ -13,13 +13,20 @@ class EmployeeUnitTest extends TestCase
 {
     use RefreshDatabase;
 
+    public function setUp(): void
+    {
+        parent::setUp();
+
+        $this->artisan('migrate');
+    }
+
     public function test_get_paginated_employees(){
         Company::factory(5)->create();
         Employee::factory(20)->create();
 
         $employeeService = new EmployeeService();
 
-        $employees = $employeeService->getEmployees([
+        $employees = $employeeService->getPaginatedEmployees([
             'page' => 1,
             'per_page' => 10
         ]);
