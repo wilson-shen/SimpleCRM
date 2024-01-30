@@ -23,7 +23,7 @@ class EmployeeController extends Controller
     public function index(EmployeeIndexRequest $request)
     {
         return view('employees.index', [
-            'employees' => $this->employeeService->getEmployees($request->validated()),
+            'employees' => $this->employeeService->getPaginatedEmployees($request->validated()),
         ]);
     }
 

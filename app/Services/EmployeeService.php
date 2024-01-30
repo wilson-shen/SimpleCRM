@@ -11,12 +11,12 @@ use Illuminate\Support\Facades\Log;
 class EmployeeService
 {
     /**
-     * Retrieve all employees.
+     * Retrieve paginated employees.
      *
      * @param array $request
      * @return LengthAwarePaginator
      */
-    public function getEmployees(array $request): LengthAwarePaginator
+    public function getPaginatedEmployees(array $request): LengthAwarePaginator
     {
         return Employee::paginate(
             page: $request['page'] ?? 1,

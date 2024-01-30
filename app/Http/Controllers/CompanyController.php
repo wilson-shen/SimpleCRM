@@ -21,7 +21,7 @@ class CompanyController extends Controller
     public function index(CompanyIndexRequest $request)
     {
         return view('companies.index', [
-            'companies' => $this->companyService->getCompanies($request->validated()),
+            'companies' => $this->companyService->getPaginatedCompanies($request->validated()),
         ]);
     }
 

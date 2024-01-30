@@ -14,10 +14,20 @@ class CompanyService
     /**
      * Retrieve all companies.
      *
+     * @return Collection
+     */
+    public function getCompanies(): Collection
+    {
+        return Company::get();
+    }
+
+    /**
+     * Retrieve paginated companies.
+     *
      * @param array $request
      * @return LengthAwarePaginator
      */
-    public function getCompanies(array $request): LengthAwarePaginator
+    public function getPaginatedCompanies(array $request): LengthAwarePaginator
     {
         return Company::paginate(
             page: $request['page'] ?? 1,
